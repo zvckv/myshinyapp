@@ -1,38 +1,39 @@
 library(shiny)
-
+library(dplyr)
+library(ggplot2)
 
 ui <- fluidPage(
-  titlePanel("My First Shiny App"),
+  titlePanel("My First Shiny"),
+  h1("Star Wars Characters"),
   sidebarLayout(
     sidebarPanel(
-      h2("My app from scratch"),
-      sliderInput(inputId ="newbins",
-        "Number of bins:",
-        min = 1,
-        max = 50,
-        value = 30
+      h2("my app from scratch"),
+      sliderInput(
+        inputId = "taille",
+        label = "Height of characters",
+        min = 0,
+        max = 250,
+        value = 50
       )
     ),
     mainPanel(
-      plotOutput("distPlot")
+      plotOutput("StarWarsPlot")
     )
   )
 )
 
-
 server <- function(input, output) {
-  output$distPlot <- renderPlot({
-    x <- faithful[, 2]
-    bins <- seq(min(x), 
-    max(x), 
-    length.out = input$newbins + 1)
-    hist(x,
-      breaks = bins, col = "darkgray", border = "white",
-      xlab = "Waiting time to next eruption (in mins)",
-      main = "Histogram of waiting times"
-    )
+  output$StarWarsPlot <- renderPlot({
+    starwars |>
+      filter(height > input$taille) |>
+      ggplot(aes(x = height)) + 
+      geom_histogram(
+        binwidth = 10, 
+        fill = "darkgray", 
+        color = "white"
+      )
+    
   })
 }
-
 
 shinyApp(ui = ui, server = server)
