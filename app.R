@@ -3,8 +3,17 @@ library(dplyr)
 library(ggplot2)
 library(glue)
 library(DT)
+library(bslib)
+library(thematic)
+
+
+thematic_shiny(font="auto")
+
+
 
 ui <- fluidPage(
+  theme=bs_theme(version=5,
+  bootswatch = "vapor"), 
   titlePanel("My First Shiny"),
   h1("Star Wars Characters"),
   selectInput(
@@ -43,7 +52,7 @@ server <- function(input, output) {
       ggplot(aes(x = height)) +
       geom_histogram(
         binwidth = 10,
-        fill = "darkgrey",
+        fill = "pink",
         color = "white"
       ) + 
       labs(
